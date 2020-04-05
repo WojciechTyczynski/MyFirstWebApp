@@ -12,6 +12,7 @@ class Patient(BaseModel):
 app = FastAPI()
 app.id = 0
 app.counter = 0
+app.patients = []
 
 @app.get("/")
 def root():
@@ -36,7 +37,18 @@ def delete_something():
 @app.post("/patient",  response_model=Patient)
 def recive_patient(rq: PatientData):
     app.id += 1
+    app.patients.append(Patient(id = app.id, patient=rq))
     return Patient(id = app.id, patient=rq)
+
+@app.get("/patient/{pk}", response_model=PatientData)
+def read_patient(pk: int):
+    find = False
+    for patient in app.patients:
+        if patient.id == pk:
+            find = True
+            result = patient.patient
+            return result
+
 
 @app.get('/counter')
 def counter():
