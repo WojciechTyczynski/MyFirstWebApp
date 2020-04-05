@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 class PatientData(BaseModel):
@@ -44,10 +44,12 @@ def recive_patient(rq: PatientData):
 def read_patient(pk: int):
     find = False
     for patient in app.patients:
-        if patient.id == pk:
+        if patient.id == int(pk):
             find = True
-            result = patient.patient
+            result = PatientData(name = patient.patient['name'], surename = patient.patient['surename'])
             return result
+    if find == False:
+        raise HTTPException(status_code=204)
 
 
 @app.get('/counter')
