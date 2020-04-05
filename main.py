@@ -37,3 +37,8 @@ def delete_something():
 def recive_patient(rq: PatientData):
     app.id += 1
     return Patient(id = app.id, patient=rq)
+
+@app.get('/counter')
+def counter():
+    app.counter += 1
+    return str(app.counter)
