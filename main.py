@@ -36,9 +36,9 @@ def delete_something():
 
 @app.post("/patient",  response_model=Patient)
 def recive_patient(rq: PatientData):
-    app.patients.append(Patient(id = app.id, patient=rq))
     app.id += 1
-    return app.patients[id-1]
+    app.patients.append(Patient(id = app.id-1, patient=rq))
+    return Patient(id = app.id-1, patient=rq)
 
 @app.get("/patient/{pk}", response_model=PatientData)
 def read_patient(pk: int):
