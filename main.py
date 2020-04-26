@@ -1,5 +1,6 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response, Cookie
 from pydantic import BaseModel
+import base64
 
 class PatientData(BaseModel):
     name: str
@@ -13,6 +14,7 @@ app = FastAPI()
 app.id = 0
 app.counter = 0
 app.patients = []
+app.secret_key = 'DWl4oicHEm87PyEfadxBz3YO3dvk2SazdaGFcxi989qewvxcsdm41cdpqcjea'
 
 @app.get("/")
 def root():
@@ -37,6 +39,12 @@ def put_something():
 @app.delete("/method")
 def delete_something():
     return {"method":"DELETE"}
+
+@app.post("/login")
+def login_cookie(user: str, password: str, response: Response):
+    session_token = base64.b64encode(bytes(f"{user}:{password}", encoding='utf8'))
+    response.set_cookie(key="session_token", value=session_token)
+    return {"Authorization":f"Basic {session_token}"}
 
 @app.post("/patient",  response_model=Patient)
 def recive_patient(rq: PatientData):
