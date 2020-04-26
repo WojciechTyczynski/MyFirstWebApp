@@ -16,7 +16,11 @@ app.patients = []
 
 @app.get("/")
 def root():
-    return {"message": "Hello World during the coronavirus pandemic!"}
+    return {"message": "Welcome!"}
+
+@app.get("/welcome")
+def root():
+    return {"message": "Welcome!"}
 
 @app.get("/method")
 def get_something():
